@@ -1,5 +1,6 @@
 "use server";
 
+import { account, ID } from "@/appwrite/config";
 import { signUpSchema, SignUpValues } from "@/lib/validation";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { redirect } from "next/navigation";
@@ -10,6 +11,11 @@ export async function signUp(
   try {
     const { username, email, password } = signUpSchema.parse(credentials);
     console.log(username, email, password);
+
+    // Use Appwrite's account signup method
+    // const user = await account.create(ID.unique(), username, email, password);
+    const user = await account.create(username, email, password);
+    console.log("Account created successfully:", user);
 
     // const passwordHash = await hash(password, {
     //   memoryCost: 19456,
