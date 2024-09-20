@@ -49,22 +49,15 @@ export async function signUp(
       },
     );
     // Create a session for the newly registered user
-    try {
-      const jwtToken = generateToken(response as unknown as Users);
-      // Set JWT token in a cookie
-      cookies().set("authToken", jwtToken, {
-        httpOnly: true,
-        secure: process.env.NEXT_PUBLIC_NODE_ENV === "production",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-      });
-      return redirect("/");
-    } catch {
-      return {
-        error:
-          "Account created, but unable to log in. Please try logging in manually.",
-      };
-    }
+    const jwtToken = generateToken(response as unknown as Users);
+    // Set JWT token in a cookie
+    cookies().set("authToken", jwtToken, {
+      httpOnly: true,
+      secure: process.env.NEXT_PUBLIC_NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
+    return redirect("/");
   } catch (error) {
     if (isRedirectError(error)) throw error;
     return {

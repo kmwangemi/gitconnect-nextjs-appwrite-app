@@ -33,31 +33,20 @@ export async function login(
         error: "Incorrect email or password",
       };
     }
-    // Create a session for the login user
-    try {
-      const jwtToken = generateToken(existingEmail.documents[0] as unknown as Users);
-      // Set JWT token in a cookie
-      cookies().set("authToken", jwtToken, {
-        httpOnly: true,
-        secure: process.env.NEXT_PUBLIC_NODE_ENV === "production",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-      });
-      return redirect("/");
-    } catch {
-      return {
-        error:
-          "Unable to log in. Please try logging in again.",
-      };
-    }
+    // Create a session for the login 
+    const jwtToken = generateToken(
+      existingEmail.documents[0] as unknown as Users,
+    );
+    // Set JWT token in a cookie
+    cookies().set("authToken", jwtToken, {
+      httpOnly: true,
+      secure: process.env.NEXT_PUBLIC_NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
+    return redirect("/");
   } catch (error: unknown) {
     if (isRedirectError(error)) throw error;
-    // Handle specific Appwrite error codes (for example: invalid credentials)
-    if (typeof error === 'object' && error !== null && 'code' in error && error.code === 401) {
-      return {
-        error: "Incorrect email or password.",
-      };
-    }
     return {
       error: "Something went wrong. Please try again.",
     };

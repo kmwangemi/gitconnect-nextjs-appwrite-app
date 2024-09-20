@@ -19,9 +19,7 @@ import { login } from "./actions";
 
 export default function LoginForm() {
   const [error, setError] = useState<string>();
-
   const [isPending, startTransition] = useTransition();
-
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -29,7 +27,6 @@ export default function LoginForm() {
       password: "",
     },
   });
-
   async function onSubmit(values: LoginValues) {
     setError(undefined);
     startTransition(async () => {
@@ -37,7 +34,6 @@ export default function LoginForm() {
       if (error) setError(error);
     });
   }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
