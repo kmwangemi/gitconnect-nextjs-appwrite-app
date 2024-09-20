@@ -3,18 +3,20 @@ import { z } from "zod";
 const requiredString = z.string().trim().min(1, "Required");
 
 export const signUpSchema = z.object({
+  firstName: requiredString.min(3, "Must be at least 3 characters"),
+  lastName: requiredString.min(3, "Must be at least 3 characters"),
   email: requiredString.email("Invalid email address"),
-  username: requiredString.regex(
+  userName: requiredString.regex(
     /^[a-zA-Z0-9_-]+$/,
     "Only letters, numbers, - and _ allowed",
   ),
-  password: requiredString.min(6, "Must be at least 6 characters"),
+  password: requiredString.min(8, "Must be at least 8 characters"),
 });
 
 export type SignUpValues = z.infer<typeof signUpSchema>;
 
 export const loginSchema = z.object({
-  username: requiredString,
+  userName: requiredString,
   password: requiredString,
 });
 

@@ -1,90 +1,77 @@
 "use server";
 
-import { account, ID } from "@/appwrite/config";
+import { databaseID, databases, ID, Query, userCollectionID } from "@/appwrite/config";
 import { signUpSchema, SignUpValues } from "@/lib/validation";
 import { isRedirectError } from "next/dist/client/components/redirect";
 import { redirect } from "next/navigation";
+import bcrypt from "bcryptjs";
+import { cookies } from "next/headers";
+import { generateToken } from "@/lib/utils";
+import { Users } from "@/types/types";
 
 export async function signUp(
   credentials: SignUpValues,
 ): Promise<{ error: string }> {
   try {
-    const { username, email, password } = signUpSchema.parse(credentials);
-    console.log(username, email, password);
-
-    // Use Appwrite's account signup method
-    // const user = await account.create(ID.unique(), username, email, password);
-    const user = await account.create(username, email, password);
-    console.log("Account created successfully:", user);
-
-    // const passwordHash = await hash(password, {
-    //   memoryCost: 19456,
-    //   timeCost: 2,
-    //   outputLen: 32,
-    //   parallelism: 1,
-    // });
-
-    // const userId = generateIdFromEntropySize(10);
-
-    // const existingUsername = await prisma.user.findFirst({
-    //   where: {
-    //     username: {
-    //       equals: username,
-    //       mode: "insensitive",
-    //     },
-    //   },
-    // });
-
-    // if (existingUsername) {
-    //   return {
-    //     error: "Username already taken",
-    //   };
-    // }
-
-    // const existingEmail = await prisma.user.findFirst({
-    //   where: {
-    //     email: {
-    //       equals: email,
-    //       mode: "insensitive",
-    //     },
-    //   },
-    // });
-
-    // if (existingEmail) {
-    //   return {
-    //     error: "Email already taken",
-    //   };
-    // }
-
-    // await prisma.$transaction(async (tx) => {
-    //   await tx.user.create({
-    //     data: {
-    //       id: userId,
-    //       username,
-    //       displayName: username,
-    //       email,
-    //       passwordHash,
-    //     },
-    //   });
-    //   await streamServerClient.upsertUser({
-    //     id: userId,
-    //     username,
-    //     name: username,
-    //   });
-    // });
-
-    // const session = await lucia.createSession(userId, {});
-    // const sessionCookie = lucia.createSessionCookie(session.id);
-    // cookies().set(
-    //   sessionCookie.name,
-    //   sessionCookie.value,
-    //   sessionCookie.attributes,
-    // );
-
-    return redirect("/");
+    const { firstName, lastName, email, userName, password } =
+      signUpSchema.parse(credentials);
+    // Query the collection for a document with the specified email
+    const existingEmail = await databases.listDocuments(
+      databaseID,
+      userCollectionID,
+      [Query.equal("email", email)],
+    );
+    if (existingEmail.total > 0) {
+      return {
+        error: "Email already taken",
+      };
+    }
+    // Query the collection for a document with the specified userName
+    const existingUserName = await databases.listDocuments(
+      databaseID,
+      userCollectionID,
+      [Query.equal("userName", userName)],
+    );
+    if (existingUserName.total > 0) {
+      return {
+        error: "UserName already taken",
+      };
+    }
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const response = await databases.createDocument(
+      databaseID,
+      userCollectionID,
+      ID.unique(),
+      {
+        firstName,
+        lastName,
+        email,
+        userName,
+        password: hashedPassword,
+      },
+    );
+    // Create a session for the newly registered user
+    try {
+      const jwtToken = generateToken(response as unknown as Users);
+      // Set JWT token in a cookie
+      cookies().set("authToken", jwtToken, {
+        httpOnly: true,
+        secure: process.env.NEXT_PUBLIC_NODE_ENV === "production",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      });
+      // return redirect("/");
+      return {
+        error: "",
+      };
+    } catch {
+      return {
+        error:
+          "Account created, but unable to log in. Please try logging in manually.",
+      };
+    }
   } catch (error) {
     if (isRedirectError(error)) throw error;
-    console.error(error);
     return {
       error: "Something went wrong. Please try again.",
     };
