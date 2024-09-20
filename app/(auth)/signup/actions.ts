@@ -15,7 +15,6 @@ export async function signUp(
   try {
     const { firstName, lastName, email, userName, password } =
       signUpSchema.parse(credentials);
-    // Query the collection for a document with the specified email
     const existingEmail = await databases.listDocuments(
       databaseID,
       userCollectionID,
@@ -26,7 +25,6 @@ export async function signUp(
         error: "Email already taken",
       };
     }
-    // Query the collection for a document with the specified userName
     const existingUserName = await databases.listDocuments(
       databaseID,
       userCollectionID,
@@ -60,10 +58,7 @@ export async function signUp(
         path: "/",
         maxAge: 60 * 60 * 24 * 7, // 7 days
       });
-      // return redirect("/");
-      return {
-        error: "",
-      };
+      return redirect("/");
     } catch {
       return {
         error:

@@ -19,9 +19,7 @@ import { signUp } from "./actions";
 
 export default function SignUpForm() {
   const [error, setError] = useState<string>();
-
   const [isPending, startTransition] = useTransition();
-
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -32,7 +30,6 @@ export default function SignUpForm() {
       password: "",
     },
   });
-
   async function onSubmit(values: SignUpValues) {
     setError(undefined);
     startTransition(async () => {
@@ -40,7 +37,6 @@ export default function SignUpForm() {
       if (error) setError(error);
     });
   }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
