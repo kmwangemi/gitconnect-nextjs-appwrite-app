@@ -5,6 +5,9 @@ const config = {
   appwriteUserCollectionId: String(
     process.env.NEXT_PUBLIC_APPWRITE_USER_COLLECTION_ID,
   ),
+  appwritePostCollectionId: String(
+    process.env.NEXT_PUBLIC_APPWRITE_POST_COLLECTION_ID,
+  ),
 };
 
 export default config;

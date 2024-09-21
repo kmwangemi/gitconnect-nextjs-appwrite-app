@@ -33,7 +33,7 @@ export default function UserButton({ className }: UserButtonProps) {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Logged in as @{user.userName}</DropdownMenuLabel>
+        <DropdownMenuLabel>@{user.userName}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <Link href={`/users/${user?.userId}`}>
           <DropdownMenuItem className="cursor-pointer">
