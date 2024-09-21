@@ -21,6 +21,7 @@ export default function PostEditor() {
         placeholder: "Post content...",
       }),
     ],
+    immediatelyRender: false, // Set this to false to avoid SSR mismatches
   });
   const input =
     editor?.getText({
