@@ -1,10 +1,10 @@
 "use client";
 
+import { UserSession } from "@/types/types";
 import React, { createContext, useContext } from "react";
 
 interface SessionContext {
-  user: string;
-  session: string;
+  user: UserSession;
 }
 
 const SessionContext = createContext<SessionContext | null>(null);

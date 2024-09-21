@@ -6,7 +6,7 @@ import { isRedirectError } from "next/dist/client/components/redirect";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import { Users } from "@/types/types";
+import { User } from "@/types/types";
 import { generateToken } from "@/lib/auth";
 
 export async function signUp(
@@ -49,7 +49,7 @@ export async function signUp(
       },
     );
     // Create a session for the newly registered user
-    const jwtToken = generateToken(response as unknown as Users);
+    const jwtToken = generateToken(response as unknown as User);
     // Set JWT token in a cookie
     cookies().set("authToken", jwtToken, {
       httpOnly: true,

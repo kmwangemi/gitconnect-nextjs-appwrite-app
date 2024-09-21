@@ -1,19 +1,24 @@
-import { Users } from "@/types/types";
+import { User, UserSession } from "@/types/types";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
 const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || "somethingsecret";
 
 interface DecodedToken {
-  userId: string; // Add any other fields you store in your JWT payload
+  user: UserSession;
+  iat?: number;
   exp?: number;
 }
 
 // generating token with 7 days expiry
-export function generateToken(user: Users) {
+export function generateToken(user: User) {
   return jwt.sign(
     {
-      userId: user?.$id,
+      user: {
+        userId: user?.$id,
+        userName: user?.userName,
+        avatarUrl: user?.avatarUrl,
+      },
     },
     JWT_SECRET,
     {
@@ -38,8 +43,7 @@ export function authenticateToken(token: string | undefined) {
     }
     // Return decoded token if valid and not expired
     return decoded;
-  } catch (error) {
-    console.log("toke error--->", error);
+  } catch {
     // If token verification failed (e.g., invalid token or expired)
     throw new Error("Invalid or expired token");
   }
@@ -49,48 +53,11 @@ export function authenticateToken(token: string | undefined) {
 export async function validateAndAuthenticateRequest() {
   const cookieStore = cookies(); // Access cookies in Next.js
   const token = cookieStore.get("authToken")?.value;
-  console.log("authToken-->", token);
   try {
     const decodedToken = authenticateToken(token);
     // If valid, return the decoded token
-    return { user: decodedToken.userId };
-  } catch (error) {
-    console.log("error-->", error);
-    throw new Error("Authentication failed");
+    return { user: decodedToken?.user };
+  } catch {
+    return { user: null };
   }
 }
-
-// token validation function
-// export function isTokenExpired(token: string) {
-//   try {
-//     // Verify the token and decode its payload
-//     const decoded = jwt.verify(token, JWT_SECRET) as { exp?: number };
-//     // Check the token expiration time
-//     const currentTimestamp = Math.floor(Date.now() / 1000); // Current time in seconds
-//     if (decoded.exp && currentTimestamp > decoded.exp) {
-//       // Token has expired
-//       return true;
-//     }
-//     // Token is still valid
-//     return false;
-//   } catch {
-//     // Token verification failed (e.g., invalid token or secret)
-//     return true;
-//   }
-// }
-// export function getUserIdFromToken(token: string) {
-//   try {
-//     const decoded = jwt.verify(
-//       token,
-//       process.env.NEXT_PUBLIC_JWT_SECRET || "somethingsecret",
-//     ) as { userId?: string };
-//     if (decoded.userId) {
-//       return decoded.userId;
-//     }
-//     // The token doesn't contain a userId
-//     return null;
-//   } catch {
-//     // Token verification failed (e.g., invalid token or secret)
-//     return null;
-//   }
-// }

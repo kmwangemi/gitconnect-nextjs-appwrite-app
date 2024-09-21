@@ -6,7 +6,7 @@ import { isRedirectError } from "next/dist/client/components/redirect";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import { Users } from "@/types/types";
+import { User } from "@/types/types";
 import { generateToken } from "@/lib/auth";
 
 export async function login(
@@ -35,7 +35,7 @@ export async function login(
     }
     // Create a session for the login 
     const jwtToken = generateToken(
-      existingEmail.documents[0] as unknown as Users,
+      existingEmail.documents[0] as unknown as User,
     );
     // Set JWT token in a cookie
     cookies().set("authToken", jwtToken, {

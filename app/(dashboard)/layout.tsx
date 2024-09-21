@@ -10,8 +10,7 @@ export default async function Layout({
 }) {
   // Validate and authenticate the request
   const session = await validateAndAuthenticateRequest();
-  console.log('session--->', session);
-  if (!session.user) redirect("/login");
+  if (!session?.user) redirect("/login");
   return (
     <SessionProvider value={session}>
       <div className="flex min-h-screen flex-col">

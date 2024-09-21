@@ -33,10 +33,10 @@ export default function UserButton({ className }: UserButtonProps) {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Logged in as @{user.username}</DropdownMenuLabel>
+        <DropdownMenuLabel>Logged in as @{user.userName}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link href={`/users/${user.username}`}>
-          <DropdownMenuItem>
+        <Link href={`/users/${user?.userId}`}>
+          <DropdownMenuItem className="cursor-pointer">
             <UserIcon className="mr-2 size-4" />
             Profile
           </DropdownMenuItem>
@@ -47,6 +47,7 @@ export default function UserButton({ className }: UserButtonProps) {
             queryClient.clear();
             logout();
           }}
+          className="cursor-pointer"
         >
           <LogOutIcon className="mr-2 size-4" />
           Logout
