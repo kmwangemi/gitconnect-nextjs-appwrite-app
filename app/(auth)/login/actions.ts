@@ -6,8 +6,8 @@ import { isRedirectError } from "next/dist/client/components/redirect";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
-import { generateToken } from "@/lib/utils";
 import { Users } from "@/types/types";
+import { generateToken } from "@/lib/auth";
 
 export async function login(
   credentials: LoginValues,

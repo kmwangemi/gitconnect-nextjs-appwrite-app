@@ -1,4 +1,3 @@
-import SearchField from "@/components/SearchField";
 import UserButton from "@/components/UserButton";
 import Link from "next/link";
 
@@ -9,7 +8,6 @@ export default function Navbar() {
         <Link href="/" className="text-2xl font-bold text-primary">
           GitConnect
         </Link>
-        <SearchField />
         <UserButton className="sm:ms-auto" />
       </div>
     </header>
