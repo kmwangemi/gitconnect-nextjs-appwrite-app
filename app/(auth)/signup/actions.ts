@@ -1,13 +1,19 @@
 "use server";
 
-import { databaseID, databases, ID, Query, userCollectionID } from "@/appwrite/config";
-import { signUpSchema, SignUpValues } from "@/lib/validation";
-import { isRedirectError } from "next/dist/client/components/redirect";
-import { redirect } from "next/navigation";
-import bcrypt from "bcryptjs";
-import { cookies } from "next/headers";
-import { User } from "@/types/types";
+import {
+  databaseID,
+  databases,
+  ID,
+  Query,
+  userCollectionID,
+} from "@/appwrite/config";
 import { generateToken } from "@/lib/auth";
+import { User } from "@/lib/types";
+import { signUpSchema, SignUpValues } from "@/lib/validation";
+import bcrypt from "bcryptjs";
+import { isRedirectError } from "next/dist/client/components/redirect";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function signUp(
   credentials: SignUpValues,

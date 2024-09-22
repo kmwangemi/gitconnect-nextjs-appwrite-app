@@ -1,13 +1,18 @@
 "use server";
 
-import { databaseID, databases, Query, userCollectionID } from "@/appwrite/config";
-import { loginSchema, LoginValues } from "@/lib/validation";
-import { isRedirectError } from "next/dist/client/components/redirect";
-import { redirect } from "next/navigation";
-import bcrypt from "bcryptjs";
-import { cookies } from "next/headers";
-import { User } from "@/types/types";
+import {
+  databaseID,
+  databases,
+  Query,
+  userCollectionID,
+} from "@/appwrite/config";
 import { generateToken } from "@/lib/auth";
+import { User } from "@/lib/types";
+import { loginSchema, LoginValues } from "@/lib/validation";
+import bcrypt from "bcryptjs";
+import { isRedirectError } from "next/dist/client/components/redirect";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function login(
   credentials: LoginValues,
@@ -33,7 +38,7 @@ export async function login(
         error: "Incorrect email or password",
       };
     }
-    // Create a session for the login 
+    // Create a session for the login
     const jwtToken = generateToken(
       existingEmail.documents[0] as unknown as User,
     );

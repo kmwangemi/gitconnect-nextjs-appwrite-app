@@ -1,6 +1,6 @@
 "use client";
 
-import { UserSession } from "@/types/types";
+import { UserSession } from "@/lib/types";
 import React, { createContext, useContext } from "react";
 
 interface SessionContext {

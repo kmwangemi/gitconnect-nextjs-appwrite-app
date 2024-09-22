@@ -1,4 +1,4 @@
-import { User, UserSession } from "@/types/types";
+import { User, UserSession } from "@/lib/types";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
