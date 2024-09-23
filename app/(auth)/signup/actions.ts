@@ -8,7 +8,7 @@ import {
   userCollectionID,
 } from "@/appwrite/config";
 import { generateToken } from "@/lib/auth";
-import { User } from "@/lib/types";
+import { UserData } from "@/lib/types";
 import { signUpSchema, SignUpValues } from "@/lib/validation";
 import bcrypt from "bcryptjs";
 import { isRedirectError } from "next/dist/client/components/redirect";
@@ -55,7 +55,7 @@ export async function signUp(
       },
     );
     // Create a session for the newly registered user
-    const jwtToken = generateToken(response as unknown as User);
+    const jwtToken = generateToken(response as unknown as UserData);
     // Set JWT token in a cookie
     cookies().set("authToken", jwtToken, {
       httpOnly: true,

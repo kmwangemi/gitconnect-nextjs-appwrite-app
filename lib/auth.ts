@@ -1,4 +1,4 @@
-import { User, UserSession } from "@/lib/types";
+import { UserData, UserSession } from "@/lib/types";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
@@ -11,7 +11,7 @@ interface DecodedToken {
 }
 
 // generating token with 7 days expiry
-export function generateToken(user: User) {
+export function generateToken(user: UserData) {
   return jwt.sign(
     {
       user: {

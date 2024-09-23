@@ -22,7 +22,7 @@ export interface PostData extends CommonData {
 }
 
 export interface TrimmedUserData {
-  id: string;
+  $id: string;
   userName: string;
   avatarUrl: string | null;
 }
