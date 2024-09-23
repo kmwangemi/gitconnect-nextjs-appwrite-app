@@ -1,10 +1,11 @@
 "use server";
 
-import { databaseID, databases, ID, postCollectionID } from "@/appwrite/config";
+import { databaseID, databases, ID, postCollectionID, userCollectionID } from "@/appwrite/config";
 import { validateAndAuthenticateRequest } from "@/lib/auth";
+import { PostWithUser } from "@/lib/types";
 import { createPostSchema } from "@/lib/validation";
 
-export async function submitPost(input: string) {
+export async function submitPost(input: string): Promise<PostWithUser> {
   const { user } = await validateAndAuthenticateRequest();
   if (!user) throw new Error("Unauthorized");
   const { content } = createPostSchema.parse({ content: input });
@@ -17,5 +18,21 @@ export async function submitPost(input: string) {
       userId: user?.userId,
     },
   );
-  return newPost;
+  const userData = await databases.getDocument(
+    databaseID,
+    userCollectionID,
+    user?.userId,
+  );
+  // Manually attach user data to the post
+  const postWithUser = {
+    ...newPost,
+    user: {
+      $id: userData.$id,
+      userName: userData.userName,
+      avatarUrl: userData.avatarUrl || null,
+    },
+    content,
+    userId: user.userId,
+  };
+  return postWithUser;
 }

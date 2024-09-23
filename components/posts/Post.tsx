@@ -16,14 +16,14 @@ export default function Post({ post }: PostProps) {
       <div className="flex justify-between gap-3">
         <div className="flex flex-wrap gap-3">
           <UserTooltip user={post.user}>
-            <Link href={`/users/${post.user.id}`}>
+            <Link href={`/users/${post.user.$id}`}>
               <UserAvatar avatarUrl={post.user.avatarUrl} />
             </Link>
           </UserTooltip>
           <div>
             <UserTooltip user={post.user}>
               <Link
-                href={`/users/${post.user.id}`}
+                href={`/users/${post.user.$id}`}
                 className="block font-medium hover:underline"
               >
                 {post.user.userName}
@@ -34,7 +34,7 @@ export default function Post({ post }: PostProps) {
               className="block text-sm text-muted-foreground hover:underline"
               suppressHydrationWarning
             >
-              {formatRelativeDate(post?.$createdAt)}
+              {formatRelativeDate(new Date(post.$createdAt))}
             </Link>
           </div>
         </div>
