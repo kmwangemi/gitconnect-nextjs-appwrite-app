@@ -22,9 +22,7 @@ interface UserButtonProps {
 
 export default function UserButton({ className }: UserButtonProps) {
   const { user } = useSession();
-
   const queryClient = useQueryClient();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

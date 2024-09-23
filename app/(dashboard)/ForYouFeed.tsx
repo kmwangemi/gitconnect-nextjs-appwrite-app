@@ -1,42 +1,61 @@
 "use client";
 
+import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import Post from "@/components/posts/Post";
-import { PostWithUser } from "@/lib/types";
-import { useQuery } from "@tanstack/react-query";
+import PostsLoadingSkeleton from "@/components/posts/PostLoadingSkeleton";
+import kyInstance from "@/lib/ky";
+import { PostDataWithCursor } from "@/lib/types";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
 export default function ForYouFeed() {
-  const query = useQuery<PostWithUser[]>({
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
     queryKey: ["post-feed", "for-you"],
-    queryFn: async () => {
-      const response = await fetch("/api/posts/for-you");
-      if (!response.ok)
-        throw new Error(`Request failed with status ${response.status}`);
-      return response.json();
-    },
+    queryFn: ({ pageParam }) =>
+      kyInstance
+        .get(
+          "/api/posts/for-you",
+          pageParam ? { searchParams: { cursor: pageParam } } : {},
+        )
+        .json<PostDataWithCursor>(),
+    initialPageParam: null as string | null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
-  if (query.status === "pending") {
-    return <Loader2 className="mx-auto animate-spin" />;
+  const posts = data?.pages.flatMap((page) => page.posts) || [];
+
+  if (status === "pending") {
+    return <PostsLoadingSkeleton />;
   }
-  if (query.status === "error") {
-    return (
-      <p className="text-center text-destructive">
-        An error occurred while loading posts.
-      </p>
-    );
-  }
-  if (query.data.length === 0) {
+  if (status === "success" && !posts.length && !hasNextPage) {
     return (
       <p className="text-center text-muted-foreground">
         No one has posted anything yet.
       </p>
     );
   }
+  if (status === "error") {
+    return (
+      <p className="text-center text-destructive">
+        An error occurred while loading posts.
+      </p>
+    );
+  }
   return (
-    <>
-      {query.data.map((post) => (
+    <InfiniteScrollContainer
+      className="space-y-5"
+      onBottomReached={() => hasNextPage && !isFetching && fetchNextPage()}
+    >
+      {posts.map((post) => (
         <Post key={post.$id} post={post} />
       ))}
-    </>
+      {isFetchingNextPage && <Loader2 className="mx-auto my-3 animate-spin" />}
+    </InfiniteScrollContainer>
   );
 }

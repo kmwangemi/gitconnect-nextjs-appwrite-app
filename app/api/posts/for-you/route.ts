@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   databaseID,
   databases,
@@ -11,25 +12,34 @@ import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    // const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
-    // const pageSize = 10;
+    const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
+    const pageSize = 10;
+    // Validate and authenticate user
     const { user } = await validateAndAuthenticateRequest();
     if (!user) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
+    // Fetch posts ordered by createdAt, with pagination using limit and cursor
+    const postQuery: any[] = [
+      Query.select(["$id", "content", "userId", "$createdAt"]),
+      Query.orderDesc("$createdAt"),
+      Query.limit(pageSize + 1), // Fetch 1 extra post to check if there's a next page
+    ];
+    // Add cursor if provided
+    if (cursor) {
+      postQuery.push(Query.cursorAfter(cursor));
+    }
+    // Fetch the posts from Appwrite
     const posts = await databases.listDocuments<PostData>(
       databaseID,
       postCollectionID,
-      [
-        Query.select(["$id", "content", "userId", "$createdAt"]), // Select specific fields
-        Query.orderDesc("$createdAt"), // Order posts by `createdAt`
-      ],
+      postQuery,
     );
     // Extract unique user IDs from posts
     const userIds = Array.from(
       new Set(posts.documents.map((post) => post.userId)),
     );
-    // Fetch user data for those userIds
+    // Fetch user data for the corresponding userIds
     const users = await databases.listDocuments<UserData>(
       databaseID,
       userCollectionID,
@@ -37,39 +47,32 @@ export async function GET(req: NextRequest) {
         Query.equal("$id", userIds), // Fetch users whose IDs match userIds
       ],
     );
+    // Map users to posts
     const postsWithUsers: PostWithUser[] = posts.documents.map((post) => {
-      const user = users.documents.find((user) => user.$id === post.userId);
-      if (user) {
+      const postUser = users.documents.find((user) => user.$id === post.userId);
+      if (postUser) {
         return {
           ...post,
           user: {
-            $id: user.$id,
-            userName: user.userName,
-            avatarUrl: user.avatarUrl || null,
+            $id: postUser.$id,
+            userName: postUser.userName,
+            avatarUrl: postUser.avatarUrl || null,
           },
         };
       } else {
         throw new Error(`User with ID ${post.userId} not found`);
       }
     });
-    console.log("postsWithUsers in the api--->", postsWithUsers);
-
-    // const posts = await prisma.post.findMany({
-    //   include: getPostDataInclude(user.id),
-    //   orderBy: { createdAt: "desc" },
-    //   take: pageSize + 1,
-    //   cursor: cursor ? { id: cursor } : undefined,
-    // });
-
-    // const nextCursor = posts.length > pageSize ? posts[pageSize].id : null;
-
-    // const data: PostsPage = {
-    //   posts: posts.slice(0, pageSize),
-    //   nextCursor,
-    // };
-    return Response.json(postsWithUsers);
+    // Pagination logic: Determine the next cursor
+    const nextCursor =
+      posts.documents.length > pageSize ? posts.documents[pageSize].$id : null;
+    // Return paginated posts and next cursor
+    return Response.json({
+      posts: postsWithUsers.slice(0, pageSize), // Return only required number of posts
+      nextCursor,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching posts with users:", error);
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }

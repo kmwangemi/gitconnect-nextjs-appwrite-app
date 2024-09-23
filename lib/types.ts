@@ -31,6 +31,11 @@ export interface PostWithUser extends PostData {
   user: TrimmedUserData;
 }
 
+export interface PostDataWithCursor {
+  posts: PostWithUser[];
+  nextCursor: string | null;
+}
+
 // User session interface (independent from CommonData)
 export interface UserSession {
   userId: string;
