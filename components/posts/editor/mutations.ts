@@ -38,6 +38,12 @@ export function useSubmitPostMutation() {
           };
         }
       });
+      queryClient.invalidateQueries({
+        queryKey: queryFilter.queryKey,
+        predicate(query) {
+          return !query.state.data;
+        },
+      });
       toast({
         description: "Post created",
       });

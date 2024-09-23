@@ -36,7 +36,6 @@ export interface PostDataWithCursor {
   nextCursor: string | null;
 }
 
-// User session interface (independent from CommonData)
 export interface UserSession {
   userId: string;
   userName: string;
