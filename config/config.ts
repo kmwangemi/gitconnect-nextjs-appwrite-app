@@ -8,6 +8,9 @@ const config = {
   appwritePostCollectionId: String(
     process.env.NEXT_PUBLIC_APPWRITE_POST_COLLECTION_ID,
   ),
+  appwriteLikeCollectionId: String(
+    process.env.NEXT_PUBLIC_APPWRITE_LIKE_COLLECTION_ID,
+  ),
 };
 
 export default config;

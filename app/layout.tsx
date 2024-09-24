@@ -1,8 +1,8 @@
+import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import ReactQueryProvider from "./ReactQueryProvider";
-import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -14,7 +14,6 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-
 export const metadata: Metadata = {
   title: {
     template: "%s | GitConnect",

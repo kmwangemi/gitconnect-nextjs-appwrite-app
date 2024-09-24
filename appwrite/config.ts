@@ -24,6 +24,14 @@ const databases = new Databases(appwriteClient); // For interacting with databas
 const databaseID = config.appwriteDatabaseId;
 const userCollectionID = config.appwriteUserCollectionId;
 const postCollectionID = config.appwritePostCollectionId;
+const likeCollectionID = config.appwriteLikeCollectionId;
 
 export { ID, Query } from "appwrite";
-export { account, databases, databaseID, userCollectionID, postCollectionID };
+export {
+  account,
+  databases,
+  databaseID,
+  userCollectionID,
+  postCollectionID,
+  likeCollectionID,
+};

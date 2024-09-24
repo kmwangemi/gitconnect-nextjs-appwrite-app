@@ -41,3 +41,8 @@ export interface UserSession {
   userName: string;
   avatarUrl?: string | null;
 }
+
+export interface LikeInfo {
+  likes: number;
+  isLikedByUser: boolean;
+}
