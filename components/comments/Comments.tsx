@@ -1,5 +1,5 @@
 import kyInstance from "@/lib/ky";
-import { CommentDataWithCursor, PostWithRelatedData } from "@/lib/types";
+import { CommentDataWithCursor, CommentWithRelatedData, PostWithRelatedData } from "@/lib/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
@@ -7,7 +7,7 @@ import Comment from "./Comment";
 import CommentInput from "./CommentInput";
 
 interface CommentsProps {
-  post: PostWithRelatedData;
+  post: CommentWithRelatedData;
 }
 
 export default function Comments({ post }: CommentsProps) {
@@ -28,9 +28,8 @@ export default function Comments({ post }: CommentsProps) {
         pageParams: [...data.pageParams].reverse(),
       }),
     });
-
   const comments = data?.pages.flatMap((page) => page.comments) || [];
-
+  console.log('comments--->', comments);
   return (
     <div className="space-y-3">
       <CommentInput post={post} />
@@ -55,7 +54,7 @@ export default function Comments({ post }: CommentsProps) {
       )}
       <div className="divide-y">
         {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
+          <Comment key={comment.$id} comment={comment} />
         ))}
       </div>
     </div>

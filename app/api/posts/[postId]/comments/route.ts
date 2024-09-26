@@ -20,7 +20,7 @@ export async function GET(
     const queries = [
       Query.equal("postId", postId),
       Query.limit(pageSize + 1), // Fetch one extra to check if we have more
-      Query.orderAsc("createdAt"),
+      Query.orderAsc("$createdAt"),
     ];
     if (cursor) {
       queries.push(Query.cursorAfter(cursor)); // Use cursor for pagination

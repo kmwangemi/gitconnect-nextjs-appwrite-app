@@ -14,6 +14,7 @@ export function useSubmitCommentMutation(postId: string) {
   const mutation = useMutation({
     mutationFn: submitComment,
     onSuccess: async (newComment) => {
+      console.log('newComment--->', newComment);
       const queryKey: QueryKey = ["comments", postId];
       await queryClient.cancelQueries({ queryKey });
       queryClient.setQueryData<InfiniteData<CommentDataWithCursor, string | null>>(

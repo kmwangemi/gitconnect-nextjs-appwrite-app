@@ -1,4 +1,4 @@
-import { PostWithRelatedData } from "@/lib/types";
+import { CommentWithRelatedData, PostWithRelatedData } from "@/lib/types";
 import { Loader2, SendHorizonal } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -6,19 +6,15 @@ import { Input } from "../ui/input";
 import { useSubmitCommentMutation } from "./mutations";
 
 interface CommentInputProps {
-  post: PostWithRelatedData;
+  post: CommentWithRelatedData;
 }
 
 export default function CommentInput({ post }: CommentInputProps) {
   const [input, setInput] = useState("");
-
   const mutation = useSubmitCommentMutation(post.$id);
-
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-
     if (!input) return;
-
     mutation.mutate(
       {
         post,
@@ -29,7 +25,6 @@ export default function CommentInput({ post }: CommentInputProps) {
       },
     );
   }
-
   return (
     <form className="flex w-full items-center gap-2" onSubmit={onSubmit}>
       <Input

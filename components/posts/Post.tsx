@@ -17,7 +17,6 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
-  console.log("post--->", post);
   const [showComments, setShowComments] = useState(false);
   const { user } = useSession();
   return (

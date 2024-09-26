@@ -5,15 +5,18 @@ import {
   databaseID,
   commentCollectionID,
   ID,
+  userCollectionID,
+  postCollectionID,
 } from "@/appwrite/config";
 import { validateAndAuthenticateRequest } from "@/lib/auth";
+import { CommentWithRelatedData, PostWithRelatedData } from "@/lib/types";
 import { createCommentSchema } from "@/lib/validation";
 
 export async function submitComment({
   post,
   content,
 }: {
-  post: { id: string; userId: string };
+  post: CommentWithRelatedData;
   content: string;
 }) {
   const { user } = await validateAndAuthenticateRequest();
@@ -25,11 +28,49 @@ export async function submitComment({
     ID.unique(),
     {
       content: contentValidated,
-      postId: post.id,
+      postId: post.$id,
       userId: user.userId,
     },
   );
-  return comment;
+  // Fetch the user data associated with the comment
+  const userData = await databases.getDocument(
+    databaseID,
+    userCollectionID,
+    user.userId,
+  );
+  // Fetch the post data associated with the comment
+  const postData = await databases.getDocument(
+    databaseID,
+    postCollectionID,
+    post.$id,
+  );
+  // Return the comment with the associated user and post data
+  console.log("comments--->", {
+    ...comment,
+    user: {
+      $id: userData.$id,
+      userName: userData.userName,
+      avatarUrl: userData.avatarUrl || null,
+    },
+    post: {
+      $id: postData.$id,
+      content: postData.content,
+      userId: postData.userId,
+    },
+  });
+  return {
+    ...comment,
+    user: {
+      $id: userData.$id,
+      userName: userData.userName,
+      avatarUrl: userData.avatarUrl || null,
+    },
+    post: {
+      $id: postData.$id,
+      content: postData.content,
+      userId: postData.userId,
+    },
+  };
 }
 
 export async function deleteComment(id: string) {

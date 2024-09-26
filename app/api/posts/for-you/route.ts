@@ -118,7 +118,6 @@ export async function GET(req: NextRequest) {
         }
       },
     );
-    console.log('postsWithDetails--->', postsWithDetails);
     // Pagination logic: Determine the next cursor
     const nextCursor =
       posts.documents.length > pageSize ? posts.documents[pageSize].$id : null;
@@ -127,11 +126,7 @@ export async function GET(req: NextRequest) {
       posts: postsWithDetails.slice(0, pageSize), // Return only required number of posts
       nextCursor,
     });
-  } catch (error) {
-    console.error(
-      "Error fetching posts with users, likes, and comments:",
-      error,
-    );
+  } catch {
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 }
