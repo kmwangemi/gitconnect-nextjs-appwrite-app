@@ -1,4 +1,4 @@
-import { CommentData } from "@/lib/types";
+import { TrimmedCommentData } from "@/lib/types";
 import LoadingButton from "../LoadingButton";
 import { Button } from "../ui/button";
 import {
@@ -12,7 +12,7 @@ import {
 import { useDeleteCommentMutation } from "./mutations";
 
 interface DeleteCommentDialogProps {
-  comment: CommentData;
+  comment: TrimmedCommentData;
   open: boolean;
   onClose: () => void;
 }
@@ -23,13 +23,11 @@ export default function DeleteCommentDialog({
   onClose,
 }: DeleteCommentDialogProps) {
   const mutation = useDeleteCommentMutation();
-
   function handleOpenChange(open: boolean) {
     if (!open || !mutation.isPending) {
       onClose();
     }
   }
-
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
@@ -43,7 +41,7 @@ export default function DeleteCommentDialog({
         <DialogFooter>
           <LoadingButton
             variant="destructive"
-            onClick={() => mutation.mutate(comment.id, { onSuccess: onClose })}
+            onClick={() => mutation.mutate(comment.$id, { onSuccess: onClose })}
             loading={mutation.isPending}
           >
             Delete

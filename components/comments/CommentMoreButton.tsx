@@ -1,4 +1,4 @@
-import { CommentData } from "@/lib/types";
+import { TrimmedCommentData } from "@/lib/types";
 import { MoreHorizontal, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -11,7 +11,7 @@ import {
 import DeleteCommentDialog from "./DeleteCommentDialog";
 
 interface CommentMoreButtonProps {
-  comment: CommentData;
+  comment: TrimmedCommentData;
   className?: string;
 }
 
@@ -20,7 +20,6 @@ export default function CommentMoreButton({
   className,
 }: CommentMoreButtonProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
   return (
     <>
       <DropdownMenu>

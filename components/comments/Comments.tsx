@@ -1,5 +1,5 @@
 import kyInstance from "@/lib/ky";
-import { CommentDataWithCursor, CommentWithRelatedData, PostWithRelatedData } from "@/lib/types";
+import { CommentDataWithCursor, CommentWithRelatedData } from "@/lib/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
@@ -29,7 +29,7 @@ export default function Comments({ post }: CommentsProps) {
       }),
     });
   const comments = data?.pages.flatMap((page) => page.comments) || [];
-  console.log('comments--->', comments);
+  console.log('comments logging here--->', comments);
   return (
     <div className="space-y-3">
       <CommentInput post={post} />

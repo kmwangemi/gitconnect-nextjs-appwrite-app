@@ -17,14 +17,6 @@ interface UserTooltipProps extends PropsWithChildren {
 
 export default function UserTooltip({ children, user }: UserTooltipProps) {
   // const { user: loggedInUser } = useSession();
-
-  // const followerState: FollowerInfo = {
-  //   followers: user._count.followers,
-  //   isFollowedByUser: !!user.followers.some(
-  //     ({ followerId }) => followerId === loggedInUser.id,
-  //   ),
-  // };
-
   return (
     <TooltipProvider>
       <Tooltip>
@@ -35,9 +27,6 @@ export default function UserTooltip({ children, user }: UserTooltipProps) {
               <Link href={`/users/${user?.userName}`}>
                 <UserAvatar size={70} avatarUrl={user?.avatarUrl} />
               </Link>
-              {/* {loggedInUser.id !== user.id && (
-                <FollowButton userId={user.id} initialState={followerState} />
-              )} */}
             </div>
             <div>
               <Link href={`/users/${user?.$id}`}>
@@ -53,8 +42,7 @@ export default function UserTooltip({ children, user }: UserTooltipProps) {
                   {user.bio}
                 </div>
               </Linkify>
-            )}
-            <FollowerCount userId={user.id} initialState={followerState} /> */}
+            )} */}
           </div>
         </TooltipContent>
       </Tooltip>

@@ -1,4 +1,4 @@
-import { CommentWithRelatedData, PostWithRelatedData } from "@/lib/types";
+import { CommentWithRelatedData } from "@/lib/types";
 import { Loader2, SendHorizonal } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";

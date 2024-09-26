@@ -1,17 +1,16 @@
-import { CommentData, CommentWithRelatedData } from "@/lib/types";
+import { useSession } from "@/app/(dashboard)/SessionProvider";
+import { CommentWithRelatedData } from "@/lib/types";
 import { formatRelativeDate } from "@/lib/utils";
 import Link from "next/link";
 import UserAvatar from "../UserAvatar";
 import UserTooltip from "../UserTooltip";
 import CommentMoreButton from "./CommentMoreButton";
-import { useSession } from "@/app/(dashboard)/SessionProvider";
 
 interface CommentProps {
   comment: CommentWithRelatedData;
 }
 
 export default function Comment({ comment }: CommentProps) {
-  console.log('comment--->', comment);
   const { user } = useSession();
   return (
     <div className="group/comment flex gap-3 py-3">

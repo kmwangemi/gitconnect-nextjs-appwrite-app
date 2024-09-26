@@ -1,15 +1,15 @@
 "use server";
 
 import {
-  databases,
-  databaseID,
   commentCollectionID,
+  databaseID,
+  databases,
   ID,
-  userCollectionID,
   postCollectionID,
+  userCollectionID,
 } from "@/appwrite/config";
 import { validateAndAuthenticateRequest } from "@/lib/auth";
-import { CommentWithRelatedData, PostWithRelatedData } from "@/lib/types";
+import { CommentWithRelatedData } from "@/lib/types";
 import { createCommentSchema } from "@/lib/validation";
 
 export async function submitComment({
@@ -45,19 +45,6 @@ export async function submitComment({
     post.$id,
   );
   // Return the comment with the associated user and post data
-  console.log("comments--->", {
-    ...comment,
-    user: {
-      $id: userData.$id,
-      userName: userData.userName,
-      avatarUrl: userData.avatarUrl || null,
-    },
-    post: {
-      $id: postData.$id,
-      content: postData.content,
-      userId: postData.userId,
-    },
-  });
   return {
     ...comment,
     user: {

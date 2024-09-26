@@ -44,6 +44,14 @@ export interface CommentData extends CommonData {
   content: string;
 }
 
+export interface TrimmedCommentData {
+  $id: string;
+  userId: string;
+  postId: string;
+  content: string;
+  $createdAt: string;
+}
+
 export interface PostWithUser extends PostData {
   user: TrimmedUserData;
 }
@@ -92,12 +100,18 @@ export interface LikeInfo {
   isLikedByUser: boolean;
 }
 
-export interface CommentWithRelatedData extends CommonData {
-  userId: string;
-  postId: string;
-  content: string;
+export interface CommentWithRelatedData extends TrimmedCommentData {
+  // userId: string;
+  // postId: string;
+  // content: string;
   user: TrimmedUserData;
   post: TrimmedPostData;
+
+  // $id: string;
+  // userId: string;
+  // postId: string;
+  // content: string;
+  // $createdAt: string;
 }
 
 export interface CommentDataWithCursor {

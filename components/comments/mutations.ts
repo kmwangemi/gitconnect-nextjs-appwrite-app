@@ -1,4 +1,4 @@
-import { CommentDataWithCursor } from "@/lib/types";
+import { CommentDataWithCursor, CommentWithRelatedData } from "@/lib/types";
 import {
   InfiniteData,
   QueryKey,
@@ -14,25 +14,26 @@ export function useSubmitCommentMutation(postId: string) {
   const mutation = useMutation({
     mutationFn: submitComment,
     onSuccess: async (newComment) => {
-      console.log('newComment--->', newComment);
       const queryKey: QueryKey = ["comments", postId];
       await queryClient.cancelQueries({ queryKey });
       queryClient.setQueryData<InfiniteData<CommentDataWithCursor, string | null>>(
         queryKey,
         (oldData) => {
-          const firstPage = oldData?.pages[0];
+          if (!oldData) return oldData;
+          const firstPage = oldData.pages[0];
           if (firstPage) {
             return {
-              pageParams: oldData.pageParams,
+              ...oldData,
               pages: [
                 {
-                  previousCursor: firstPage.previousCursor,
-                  comments: [...firstPage.comments, newComment],
+                  ...firstPage,
+                  comments: [...firstPage.comments, newComment as unknown as CommentWithRelatedData],
                 },
                 ...oldData.pages.slice(1),
               ],
             };
           }
+          return oldData;
         },
       );
       queryClient.invalidateQueries({

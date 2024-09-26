@@ -1,6 +1,6 @@
 import { databases, databaseID, commentCollectionID, Query } from "@/appwrite/config";
 import { validateAndAuthenticateRequest } from "@/lib/auth";
-import { CommentDataWithCursor } from "@/lib/types";
+import { CommentDataWithCursor, CommentWithRelatedData } from "@/lib/types";
 import { NextRequest } from "next/server";
 
 export async function GET(
@@ -31,7 +31,7 @@ export async function GET(
       commentCollectionID,
       queries,
     );
-    const comments = commentResponse.documents;
+    const comments = commentResponse.documents as unknown as CommentWithRelatedData[];
     // Determine if there are more comments (if we fetched more than the page size)
     const previousCursor = comments.length > pageSize ? comments[0].$id : null;
     // Prepare the response, removing the extra comment used for pagination check
