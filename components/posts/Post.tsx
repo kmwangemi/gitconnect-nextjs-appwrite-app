@@ -8,9 +8,9 @@ import UserAvatar from "../UserAvatar";
 import UserTooltip from "../UserTooltip";
 import PostMoreButton from "./PostMoreButton";
 import LikeButton from "./LikeButton";
-// import { useState } from "react";
-// import Comments from "../comments/Comments";
-// import { MessageSquare } from "lucide-react";
+import { useState } from "react";
+import Comments from "../comments/Comments";
+import { MessageSquare } from "lucide-react";
 
 interface PostProps {
   post: PostWithRelatedData;
@@ -18,7 +18,7 @@ interface PostProps {
 
 export default function Post({ post }: PostProps) {
   console.log("post--->", post);
-  // const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(false);
   const { user } = useSession();
   return (
     <article className="group/post space-y-3 rounded-2xl bg-card p-5 shadow-sm">
@@ -65,30 +65,30 @@ export default function Post({ post }: PostProps) {
               isLikedByUser: post.likes.isLikedByUser,
             }}
           />
-          {/* <CommentButton
+          <CommentButton
             post={post}
             onClick={() => setShowComments(!showComments)}
-          /> */}
+          />
         </div>
       </div>
-      {/* {showComments && <Comments post={post} />} */}
+      {showComments && <Comments post={post} />}
     </article>
   );
 }
 
-// interface CommentButtonProps {
-//   post: PostData;
-//   onClick: () => void;
-// }
+interface CommentButtonProps {
+  post: PostWithRelatedData;
+  onClick: () => void;
+}
 
-// function CommentButton({ post, onClick }: CommentButtonProps) {
-//   return (
-//     <button onClick={onClick} className="flex items-center gap-2">
-//       <MessageSquare className="size-5" />
-//       <span className="text-sm font-medium tabular-nums">
-//         {post._count.comments}{" "}
-//         <span className="hidden sm:inline">comments</span>
-//       </span>
-//     </button>
-//   );
-// }
+function CommentButton({ post, onClick }: CommentButtonProps) {
+  return (
+    <button onClick={onClick} className="flex items-center gap-2">
+      <MessageSquare className="size-5" />
+      <span className="text-sm font-medium tabular-nums">
+        {post.comments.count}{" "}
+        <span className="hidden sm:inline">comments</span>
+      </span>
+    </button>
+  );
+}

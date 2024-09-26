@@ -1,4 +1,4 @@
-import { CommentsPage } from "@/lib/types";
+import { CommentDataWithCursor } from "@/lib/types";
 import {
   InfiniteData,
   QueryKey,
@@ -16,7 +16,7 @@ export function useSubmitCommentMutation(postId: string) {
     onSuccess: async (newComment) => {
       const queryKey: QueryKey = ["comments", postId];
       await queryClient.cancelQueries({ queryKey });
-      queryClient.setQueryData<InfiniteData<CommentsPage, string | null>>(
+      queryClient.setQueryData<InfiniteData<CommentDataWithCursor, string | null>>(
         queryKey,
         (oldData) => {
           const firstPage = oldData?.pages[0];
@@ -63,7 +63,7 @@ export function useDeleteCommentMutation() {
     onSuccess: async (deletedComment) => {
       const queryKey: QueryKey = ["comments", deletedComment.postId];
       await queryClient.cancelQueries({ queryKey });
-      queryClient.setQueryData<InfiniteData<CommentsPage, string | null>>(
+      queryClient.setQueryData<InfiniteData<CommentDataWithCursor, string | null>>(
         queryKey,
         (oldData) => {
           if (!oldData) return;
@@ -71,7 +71,7 @@ export function useDeleteCommentMutation() {
             pageParams: oldData.pageParams,
             pages: oldData.pages.map((page) => ({
               previousCursor: page.previousCursor,
-              comments: page.comments.filter((c) => c.id !== deletedComment.id),
+              comments: page.comments.filter((c) => c.$id !== deletedComment.id),
             })),
           };
         },

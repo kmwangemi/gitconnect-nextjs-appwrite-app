@@ -86,7 +86,7 @@ export interface LikeInfo {
   isLikedByUser: boolean;
 }
 
-// export interface CommentDataWithCursor {
-//   comments: PostWithUser[];
-//   previousCursor: string | null;
-// }
+export interface CommentDataWithCursor {
+  comments: PostWithRelatedData[];
+  previousCursor: string | null;
+}
