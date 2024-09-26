@@ -4,7 +4,7 @@ import InfiniteScrollContainer from "@/components/InfiniteScrollContainer";
 import Post from "@/components/posts/Post";
 import PostsLoadingSkeleton from "@/components/posts/PostLoadingSkeleton";
 import kyInstance from "@/lib/ky";
-import { PostDataWithCursor } from "@/lib/types";
+import { PostWithRelatedDataAndCursor } from "@/lib/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
@@ -24,7 +24,7 @@ export default function ForYouFeed() {
           "/api/posts/for-you",
           pageParam ? { searchParams: { cursor: pageParam } } : {},
         )
-        .json<PostDataWithCursor>(),
+        .json<PostWithRelatedDataAndCursor>(),
     initialPageParam: null as string | null,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });

@@ -25,6 +25,7 @@ const databaseID = config.appwriteDatabaseId;
 const userCollectionID = config.appwriteUserCollectionId;
 const postCollectionID = config.appwritePostCollectionId;
 const likeCollectionID = config.appwriteLikeCollectionId;
+const commentCollectionID = config.appwriteCommentCollectionId;
 
 export { ID, Query } from "appwrite";
 export {
@@ -34,4 +35,5 @@ export {
   userCollectionID,
   postCollectionID,
   likeCollectionID,
+  commentCollectionID,
 };
