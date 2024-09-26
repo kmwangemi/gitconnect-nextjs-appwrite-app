@@ -16,7 +16,6 @@ interface UserTooltipProps extends PropsWithChildren {
 }
 
 export default function UserTooltip({ children, user }: UserTooltipProps) {
-  // const { user: loggedInUser } = useSession();
   return (
     <TooltipProvider>
       <Tooltip>
@@ -36,13 +35,6 @@ export default function UserTooltip({ children, user }: UserTooltipProps) {
                 <div className="text-muted-foreground">@{user?.userName}</div>
               </Link>
             </div>
-            {/* {user.bio && (
-              <Linkify>
-                <div className="line-clamp-4 whitespace-pre-line">
-                  {user.bio}
-                </div>
-              </Linkify>
-            )} */}
           </div>
         </TooltipContent>
       </Tooltip>
