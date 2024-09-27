@@ -27,11 +27,11 @@ export default function UserButton({ className }: UserButtonProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button className={cn("flex-none rounded-full", className)}>
-          <UserAvatar avatarUrl={user.avatarUrl} size={40} />
+          <UserAvatar avatarUrl={user?.avatarUrl} size={40} />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>@{user.userName}</DropdownMenuLabel>
+        <DropdownMenuLabel>@{user?.userName}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <Link href={`/users/${user?.userId}`}>
           <DropdownMenuItem className="cursor-pointer">

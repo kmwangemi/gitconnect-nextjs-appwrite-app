@@ -18,8 +18,13 @@ export interface UserData extends CommonData {
 
 export interface TrimmedUserData {
   $id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
   userName: string;
   avatarUrl: string | null;
+  $createdAt: string;
+  $updatedAt: string;
 }
 
 export interface PostData extends CommonData {
@@ -91,8 +96,13 @@ export interface PostWithRelatedDataAndCursor {
 
 export interface UserSession {
   userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
   userName: string;
-  avatarUrl?: string | null;
+  avatarUrl: string | null;
+  $createdAt: string;
+  $updatedAt: string;
 }
 
 export interface LikeInfo {

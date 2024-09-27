@@ -16,8 +16,13 @@ export function generateToken(user: UserData) {
     {
       user: {
         userId: user?.$id,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        email: user?.email,
         userName: user?.userName,
         avatarUrl: user?.avatarUrl,
+        createdAt: user?.$createdAt,
+        updatedAt: user?.$updatedAt,
       },
     },
     JWT_SECRET,
