@@ -140,7 +140,6 @@ export default function UserInfo({ userId }: UserPostsProps) {
               <div>
                 <p className="font-semibold">{repo.name}</p>
                 <p className="text-sm text-gray-600">{repo.description}</p>
-                <p className="text-sm text-yellow-600">⭐ {repo.stars} stars</p>
               </div>
             </li>
           ))}

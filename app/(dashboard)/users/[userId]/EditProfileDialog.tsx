@@ -43,6 +43,8 @@ export default function EditProfileDialog({
         firstName: user?.personalDetails?.firstName || "",
         lastName: user?.personalDetails?.lastName || "",
         email: user?.personalDetails?.email || "",
+        phoneNumber: user?.personalDetails?.phoneNumber || "",
+        location: user?.personalDetails?.location || "",
       },
       education: user?.education || [{ institution: "", degree: "", year: "" }],
       workExperience: user?.workExperience || [
@@ -187,6 +189,32 @@ export default function EditProfileDialog({
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input placeholder="Your email" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="personalDetails.phoneNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Your phone number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="personalDetails.location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Location</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Your location" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -31,6 +31,8 @@ export const updateUserProfileSchema = z.object({
     firstName: requiredString,
     lastName: requiredString,
     email: requiredString,
+    phoneNumber: requiredString,
+    location: requiredString,
   }),
   // Education array validation
   education: z
