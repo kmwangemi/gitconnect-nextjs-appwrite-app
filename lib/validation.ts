@@ -28,9 +28,11 @@ export const createPostSchema = z.object({
 
 export const updateUserProfileSchema = z.object({
   personalDetails: z.object({
-    name: requiredString,
+    firstName: requiredString,
+    lastName: requiredString,
     email: requiredString,
   }),
+  // Education array validation
   education: z
     .array(
       z.object({
@@ -39,20 +41,50 @@ export const updateUserProfileSchema = z.object({
         year: requiredString,
       }),
     )
-    .nonempty(),
-  workExperience: z.array(
-    z.object({
-      company: requiredString,
-      position: requiredString,
-      duration: requiredString,
-    }),
-  ),
-  githubRepositories: z.array(
-    z.object({
-      name: requiredString,
-      url: requiredString,
-    }),
-  ),
+    .refine(
+      (education) =>
+        education.every((item) => item.institution && item.degree && item.year),
+      {
+        message:
+          "All fields in education must be filled before adding a new entry.",
+      },
+    ),
+  // Work experience array validation
+  workExperience: z
+    .array(
+      z.object({
+        company: requiredString,
+        position: requiredString,
+        year: requiredString,
+        responsibilities: requiredString,
+      }),
+    )
+    .refine(
+      (workExperience) =>
+        workExperience.every(
+          (item) => item.company && item.position && item.year,
+        ),
+      {
+        message:
+          "All fields in work experience must be filled before adding a new entry.",
+      },
+    ),
+  // GitHub repositories array validation
+  githubRepositories: z
+    .array(
+      z.object({
+        name: requiredString,
+        url: requiredString,
+      }),
+    )
+    .refine(
+      (githubRepositories) =>
+        githubRepositories.every((item) => item.name && item.url),
+      {
+        message:
+          "All fields in GitHub repositories must be filled before adding a new entry.",
+      },
+    ),
 });
 
 export type UpdateUserProfileValues = z.infer<typeof updateUserProfileSchema>;

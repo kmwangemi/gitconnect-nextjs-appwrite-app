@@ -10,7 +10,7 @@ import { TrimmedUserData } from "@/lib/types";
 import { formatDate } from "date-fns";
 import NodeCache from "node-cache"; // For caching
 import EditProfileButton from "./EditProfileButton";
-// import UserPosts from "./UserPosts";
+import UserInfo from "./UserInfo";
 
 interface PageProps {
   params: { userId: string };
@@ -81,12 +81,7 @@ export default async function Page({ params: { userId } }: PageProps) {
     <main className="flex w-full min-w-0 gap-5">
       <div className="w-full min-w-0 space-y-5">
         <UserProfile user={user} loggedInUserId={loggedInUser.userId} />
-        <div className="rounded-2xl bg-card p-5 shadow-sm">
-          <h2 className="text-center text-2xl font-bold">
-            {user.firstName}&apos;s posts
-          </h2>
-        </div>
-        {/* <UserPosts userId={user.$id} /> */}
+        <UserInfo userId={user.$id} />
       </div>
     </main>
   );
