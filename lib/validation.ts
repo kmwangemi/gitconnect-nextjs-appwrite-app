@@ -27,8 +27,32 @@ export const createPostSchema = z.object({
 });
 
 export const updateUserProfileSchema = z.object({
-  displayName: requiredString,
-  bio: z.string().max(1000, "Must be at most 1000 characters"),
+  personalDetails: z.object({
+    name: requiredString,
+    email: requiredString,
+  }),
+  education: z
+    .array(
+      z.object({
+        institution: requiredString,
+        degree: requiredString,
+        year: requiredString,
+      }),
+    )
+    .nonempty(),
+  workExperience: z.array(
+    z.object({
+      company: requiredString,
+      position: requiredString,
+      duration: requiredString,
+    }),
+  ),
+  githubRepositories: z.array(
+    z.object({
+      name: requiredString,
+      url: requiredString,
+    }),
+  ),
 });
 
 export type UpdateUserProfileValues = z.infer<typeof updateUserProfileSchema>;

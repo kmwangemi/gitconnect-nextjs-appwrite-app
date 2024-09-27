@@ -102,24 +102,16 @@ async function UserProfile({ user, loggedInUserId }: UserProfileProps) {
     <div className="h-fit w-full space-y-5 rounded-2xl bg-card p-5 shadow-sm">
       <UserAvatar
         avatarUrl={user?.avatarUrl}
-        size={250}
+        size={150}
         className="mx-auto size-full max-h-60 max-w-60 rounded-full"
       />
-      <div className="flex flex-wrap gap-3 sm:flex-nowrap">
-        <div className="me-auto space-y-3">
+      <div className="flex flex-wrap gap-2 sm:flex-nowrap">
+        <div className="me-auto space-y-2">
           <div>
-            <h1 className="text-3xl font-bold">{user.firstName}</h1>
+            <h1 className="text-xl font-bold">{user.firstName}</h1>
             <div className="text-muted-foreground">@{user.userName}</div>
           </div>
           <div>Member since {formatDate(user.$createdAt, "MMM d, yyyy")}</div>
-          <div className="flex items-center gap-3">
-            <span>
-              Posts:{" "}
-              {/* <span className="font-semibold">
-                {formatNumber(user._count.posts)}
-              </span> */}
-            </span>
-          </div>
         </div>
         {user.$id === loggedInUserId && <EditProfileButton user={user} />}
       </div>
