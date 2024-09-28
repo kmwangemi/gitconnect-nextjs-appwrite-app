@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { TrimmedUserProfileData } from "@/lib/types";
 import {
   updateUserProfileSchema,
   UpdateUserProfileValues,
@@ -25,13 +26,13 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { useUpdateProfileMutation } from "./mutations";
 
 interface EditProfileDialogProps {
-  user: UserData;
+  profile: TrimmedUserProfileData;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
 export default function EditProfileDialog({
-  user,
+  profile,
   open,
   onOpenChange,
 }: EditProfileDialogProps) {
@@ -40,14 +41,16 @@ export default function EditProfileDialog({
     mode: "onChange", // Validate fields on change
     defaultValues: {
       personalDetails: {
-        firstName: user?.personalDetails?.firstName || "",
-        lastName: user?.personalDetails?.lastName || "",
-        email: user?.personalDetails?.email || "",
-        phoneNumber: user?.personalDetails?.phoneNumber || "",
-        location: user?.personalDetails?.location || "",
+        firstName: profile?.personalDetails?.firstName || "",
+        lastName: profile?.personalDetails?.lastName || "",
+        email: profile?.personalDetails?.email || "",
+        phoneNumber: profile?.personalDetails?.phoneNumber || "",
+        location: profile?.personalDetails?.location || "",
       },
-      education: user?.education || [{ institution: "", degree: "", year: "" }],
-      workExperience: user?.workExperience || [
+      education: profile?.education || [
+        { institution: "", degree: "", year: "" },
+      ],
+      workExperience: profile?.workExperience || [
         {
           company: "",
           position: "",
@@ -55,7 +58,9 @@ export default function EditProfileDialog({
           responsibilities: "",
         },
       ],
-      githubRepositories: user?.githubRepositories || [{ name: "", url: "" }],
+      githubRepositories: profile?.githubRepositories || [
+        { name: "", url: "" },
+      ],
     },
   });
   const {
@@ -82,7 +87,6 @@ export default function EditProfileDialog({
     control: form.control,
     name: "githubRepositories",
   });
-  const mutation = useUpdateProfileMutation();
   const handleAddEducation = async () => {
     const educationFields = form.getValues("education");
     const index = educationFields.length; // Next index to add
@@ -131,17 +135,13 @@ export default function EditProfileDialog({
       });
     }
   };
+  const mutation = useUpdateProfileMutation();
   async function onSubmit(values: UpdateUserProfileValues) {
-    mutation.mutate(
-      {
-        values,
+    mutation.mutate(values, {
+      onSuccess: () => {
+        onOpenChange(false);
       },
-      {
-        onSuccess: () => {
-          onOpenChange(false);
-        },
-      },
-    );
+    });
   }
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

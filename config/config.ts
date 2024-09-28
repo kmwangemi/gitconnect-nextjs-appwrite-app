@@ -14,6 +14,9 @@ const config = {
   appwriteCommentCollectionId: String(
     process.env.NEXT_PUBLIC_APPWRITE_COMMENT_COLLECTION_ID,
   ),
+  appwriteProfileCollectionId: String(
+    process.env.NEXT_PUBLIC_APPWRITE_PROFILE_COLLECTION_ID,
+  ),
 };
 
 export default config;

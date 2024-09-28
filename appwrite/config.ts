@@ -1,5 +1,5 @@
 import config from "@/config/config";
-import { Client, Account, Databases } from "appwrite";
+import { Account, Client, Databases } from "appwrite";
 
 const appwriteClient = new Client();
 
@@ -26,14 +26,16 @@ const userCollectionID = config.appwriteUserCollectionId;
 const postCollectionID = config.appwritePostCollectionId;
 const likeCollectionID = config.appwriteLikeCollectionId;
 const commentCollectionID = config.appwriteCommentCollectionId;
+const profileCollectionID = config.appwriteProfileCollectionId;
 
 export { ID, Query } from "appwrite";
 export {
   account,
-  databases,
-  databaseID,
-  userCollectionID,
-  postCollectionID,
-  likeCollectionID,
   commentCollectionID,
+  databaseID,
+  databases,
+  likeCollectionID,
+  postCollectionID,
+  profileCollectionID,
+  userCollectionID,
 };

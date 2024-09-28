@@ -7,7 +7,7 @@ import {
   userCollectionID,
 } from "@/appwrite/config";
 import { generateToken } from "@/lib/auth";
-import { TrimmedUserData } from "@/lib/types";
+import { UserData } from "@/lib/types";
 import { loginSchema, LoginValues } from "@/lib/validation";
 import bcrypt from "bcryptjs";
 import { isRedirectError } from "next/dist/client/components/redirect";
@@ -39,9 +39,7 @@ export async function login(
       };
     }
     // Create a session for the login
-    const jwtToken = generateToken(
-      existingEmail.documents[0] as unknown as TrimmedUserData,
-    );
+    const jwtToken = generateToken(existingEmail.documents[0] as UserData);
     // Set JWT token in a cookie
     cookies().set("authToken", jwtToken, {
       httpOnly: true,

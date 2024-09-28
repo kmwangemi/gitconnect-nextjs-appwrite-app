@@ -4,11 +4,12 @@ import {
   databaseID,
   databases,
   ID,
+  profileCollectionID,
   Query,
   userCollectionID,
 } from "@/appwrite/config";
 import { generateToken } from "@/lib/auth";
-import { TrimmedUserData } from "@/lib/types";
+import { UserData } from "@/lib/types";
 import { signUpSchema, SignUpValues } from "@/lib/validation";
 import bcrypt from "bcryptjs";
 import { isRedirectError } from "next/dist/client/components/redirect";
@@ -42,7 +43,8 @@ export async function signUp(
       };
     }
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const response = await databases.createDocument(
+    // Create a new user document in the database
+    const user = await databases.createDocument(
       databaseID,
       userCollectionID,
       ID.unique(),
@@ -54,8 +56,30 @@ export async function signUp(
         password: hashedPassword,
       },
     );
+    // Create an empty user profile
+    const emptyProfileData = {
+      userId: user.$id,
+      personalDetails: JSON.stringify({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        phoneNumber: "",
+        location: "",
+      }),
+      education: JSON.stringify([{ institution: "", degree: "", year: "" }]),
+      workExperience: JSON.stringify([
+        { company: "", position: "", year: "", responsibilities: "" },
+      ]),
+      githubRepositories: JSON.stringify([{ name: "", url: "" }]),
+    };
+    await databases.createDocument(
+      databaseID,
+      profileCollectionID,
+      ID.unique(),
+      emptyProfileData,
+    );
     // Create a session for the newly registered user
-    const jwtToken = generateToken(response as unknown as TrimmedUserData);
+    const jwtToken = generateToken(user as UserData);
     // Set JWT token in a cookie
     cookies().set("authToken", jwtToken, {
       httpOnly: true,

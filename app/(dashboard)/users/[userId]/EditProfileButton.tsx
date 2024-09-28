@@ -1,15 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { TrimmedUserData } from "@/lib/types";
+import { TrimmedUserProfileData } from "@/lib/types";
 import { useState } from "react";
 import EditProfileDialog from "./EditProfileDialog";
 
 interface EditProfileButtonProps {
-  user: TrimmedUserData;
+  profile: TrimmedUserProfileData;
 }
 
-export default function EditProfileButton({ user }: EditProfileButtonProps) {
+export default function EditProfileButton({ profile }: EditProfileButtonProps) {
   const [showDialog, setShowDialog] = useState(false);
   return (
     <>
@@ -17,7 +17,7 @@ export default function EditProfileButton({ user }: EditProfileButtonProps) {
         Edit profile
       </Button>
       <EditProfileDialog
-        user={user}
+        profile={profile}
         open={showDialog}
         onOpenChange={setShowDialog}
       />

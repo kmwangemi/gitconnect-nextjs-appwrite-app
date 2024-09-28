@@ -133,3 +133,46 @@ export interface CommentDataWithCursor {
   comments: CommentWithRelatedData[];
   previousCursor: string | null;
 }
+
+interface PersonalDetails {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  location: string;
+}
+
+interface Education {
+  institution: string;
+  degree: string;
+  year: string;
+}
+
+interface WorkExperience {
+  company: string;
+  position: string;
+  year: string;
+  responsibilities: string;
+}
+
+interface GithubRepository {
+  name: string;
+  url: string;
+}
+
+export interface UserProfileData extends CommonData {
+  userId: string;
+  personalDetails: PersonalDetails;
+  education: Education[];
+  workExperience: WorkExperience[];
+  githubRepositories: GithubRepository[];
+}
+
+export interface TrimmedUserProfileData {
+  $id: string;
+  userId: string;
+  personalDetails: PersonalDetails;
+  education: Education[];
+  workExperience: WorkExperience[];
+  githubRepositories: GithubRepository[];
+}

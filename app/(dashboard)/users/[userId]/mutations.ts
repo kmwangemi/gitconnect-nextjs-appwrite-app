@@ -1,14 +1,24 @@
 import { useToast } from "@/hooks/use-toast";
-import { PostWithRelatedDataAndCursor } from "@/lib/types";
+import { TrimmedUserProfileData } from "@/lib/types";
 import { UpdateUserProfileValues } from "@/lib/validation";
-import {
-  InfiniteData,
-  QueryFilters,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Models } from "appwrite";
 import { useRouter } from "next/navigation";
 import { updateUserProfile } from "./actions";
+
+// Helper function to transform Appwrite Document to TrimmedUserProfileData
+function transformToTrimmedUserProfileData(
+  document: Models.Document,
+): TrimmedUserProfileData {
+  return {
+    $id: document.$id,
+    userId: document.userId,
+    personalDetails: JSON.parse(document.personalDetails),
+    education: JSON.parse(document.education),
+    workExperience: JSON.parse(document.workExperience),
+    githubRepositories: JSON.parse(document.githubRepositories),
+  };
+}
 
 export function useUpdateProfileMutation() {
   const { toast } = useToast();
@@ -16,39 +26,33 @@ export function useUpdateProfileMutation() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (values: UpdateUserProfileValues) => {
-      return await updateUserProfile(values);
+      const updatedDocument = await updateUserProfile(values);
+      return transformToTrimmedUserProfileData(updatedDocument);
     },
-    onSuccess: async (updatedUser) => {
-      const queryFilter: QueryFilters = {
-        queryKey: ["post-feed"],
-      };
-      await queryClient.cancelQueries(queryFilter);
-      queryClient.setQueriesData<InfiniteData<PostWithRelatedDataAndCursor, string | null>>(
-        queryFilter,
-        (oldData) => {
-          if (!oldData) return;
-          return {
-            pageParams: oldData.pageParams,
-            pages: oldData.pages.map((page) => ({
-              nextCursor: page.nextCursor,
-              posts: page.posts.map((post) => {
-                if (post.user.id === updatedUser.id) {
-                  return {
-                    ...post,
-                    user: {
-                      ...updatedUser,
-                    },
-                  };
-                }
-                return post;
-              }),
-            })),
-          };
+    onSuccess: async (updatedUser: TrimmedUserProfileData) => {
+      // Invalidate and refetch profile query
+      await queryClient.invalidateQueries({ queryKey: ["profile"] });
+      // Update posts query data
+      queryClient.setQueriesData(
+        { queryKey: ["posts"] },
+        (oldData: TrimmedUserProfileData[] | undefined) => {
+          if (!oldData) return oldData;
+          return oldData.map((post) => {
+            if (post.$id === updatedUser.$id) {
+              return {
+                ...post,
+                ...updatedUser,
+              };
+            }
+            return post;
+          });
         },
       );
+      // Update user query data if it exists
+      queryClient.setQueryData(["user", updatedUser.userId], updatedUser);
       router.refresh();
       toast({
-        description: "Profile updated",
+        description: "Profile updated successfully",
       });
     },
     onError(error) {
