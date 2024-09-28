@@ -51,7 +51,7 @@ export default function UserInfo({ profile }: UserProfileProps) {
                 {job?.company || "None"} | {job?.year || "None"}
               </p>
               <ul className="mt-2 list-inside list-disc">
-                <li className="text-sm">{job.responsibilities || "None"}</li>
+                <li className="text-sm">{job?.responsibilities || "None"}</li>
               </ul>
             </li>
           ))}

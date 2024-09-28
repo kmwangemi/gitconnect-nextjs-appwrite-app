@@ -94,11 +94,6 @@ export interface UserDataAndCursor {
   nextCursor: string | null;
 }
 
-// export interface PostDataWithCursor {
-//   posts: PostWithUser[];
-//   nextCursor: string | null;
-// }
-
 export interface UserSession {
   userId: string;
   firstName: string;
@@ -175,4 +170,9 @@ export interface TrimmedUserProfileData {
   education: Education[];
   workExperience: WorkExperience[];
   githubRepositories: GithubRepository[];
+}
+
+export interface UserProfileDataAndCursor {
+  profiles: UserProfileData[];
+  nextCursor: string | null;
 }
