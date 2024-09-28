@@ -40,8 +40,7 @@ export async function GET(
       previousCursor,
     };
     return new Response(JSON.stringify(data), { status: 200 });
-  } catch (error) {
-    console.error(error);
+  } catch {
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
     });

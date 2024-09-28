@@ -6,11 +6,9 @@ const appwriteClient = new Client();
 if (!config.appwriteProjectId) {
   throw new Error("Missing Appwrite Project ID");
 }
-
 if (!config.appwriteUrl) {
   throw new Error("Missing Appwrite URL");
 }
-
 if (!config.appwriteDatabaseId) {
   throw new Error("Missing Appwrite Database ID");
 }
@@ -27,7 +25,6 @@ const postCollectionID = config.appwritePostCollectionId;
 const likeCollectionID = config.appwriteLikeCollectionId;
 const commentCollectionID = config.appwriteCommentCollectionId;
 const profileCollectionID = config.appwriteProfileCollectionId;
-
 export { ID, Query } from "appwrite";
 export {
   account,

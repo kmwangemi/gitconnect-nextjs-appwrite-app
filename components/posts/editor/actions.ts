@@ -2,10 +2,10 @@
 
 import { databaseID, databases, ID, postCollectionID, userCollectionID } from "@/appwrite/config";
 import { validateAndAuthenticateRequest } from "@/lib/auth";
-import { PostWithUser } from "@/lib/types";
+import { PostWithRelatedData, PostWithUser } from "@/lib/types";
 import { createPostSchema } from "@/lib/validation";
 
-export async function submitPost(input: string): Promise<PostWithUser> {
+export async function submitPost(input: string): Promise<PostWithRelatedData> {
   const { user } = await validateAndAuthenticateRequest();
   if (!user) throw new Error("Unauthorized");
   const { content } = createPostSchema.parse({ content: input });

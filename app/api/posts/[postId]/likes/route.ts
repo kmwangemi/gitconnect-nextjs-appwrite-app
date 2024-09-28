@@ -50,8 +50,7 @@ export async function GET(
       isLikedByUser: userLike.total > 0,
     };
     return new Response(JSON.stringify(data));
-  } catch (error) {
-    console.error(error);
+  } catch {
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
     });
@@ -99,8 +98,7 @@ export async function POST(
     });
 
     return new Response();
-  } catch (error) {
-    console.error(error);
+  } catch {
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
     });
@@ -144,8 +142,7 @@ export async function DELETE(
     const likeId = existingLikes.documents[0].$id;
     await databases.deleteDocument(databaseID, likeCollectionID, likeId);
     return new Response();
-  } catch (error) {
-    console.error(error);
+  } catch {
     return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
     });

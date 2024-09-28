@@ -29,7 +29,6 @@ export default function Comments({ post }: CommentsProps) {
       }),
     });
   const comments = data?.pages.flatMap((page) => page.comments) || [];
-  console.log('comments logging here--->', comments);
   return (
     <div className="space-y-3">
       <CommentInput post={post} />

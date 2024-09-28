@@ -9,7 +9,6 @@ export default function PostsLoadingSkeleton() {
     </div>
   );
 }
-
 function PostLoadingSkeleton() {
   return (
     <div className="w-full animate-pulse space-y-3 rounded-2xl bg-card p-5 shadow-sm">

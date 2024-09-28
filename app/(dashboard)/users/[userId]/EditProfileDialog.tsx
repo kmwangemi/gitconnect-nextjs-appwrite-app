@@ -151,7 +151,6 @@ export default function EditProfileDialog({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-            {/* Personal Details Section */}
             <section className="mb-8">
               <h2 className="mb-2 text-lg font-semibold">Personal Details</h2>
               <div className="space-y-2 rounded-md border p-4">
@@ -288,7 +287,6 @@ export default function EditProfileDialog({
                 </Button>
               </div>
             </section>
-            {/* Work Experience Section */}
             <section className="mb-8">
               <h2 className="mb-2 text-lg font-semibold">Work Experience</h2>
               <div className="space-y-4">
@@ -374,7 +372,6 @@ export default function EditProfileDialog({
                 </Button>
               </div>
             </section>
-            {/* GitHub Repositories Section */}
             <section className="mb-8">
               <h2 className="mb-2 text-lg font-semibold">
                 GitHub Repositories

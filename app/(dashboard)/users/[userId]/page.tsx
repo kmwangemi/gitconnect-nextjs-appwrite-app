@@ -51,8 +51,7 @@ const getUser = async (userId: string): Promise<TrimmedUserData> => {
     // Store the result in the cache
     myCache.set(cacheKey, user, 3600); // Cache for 1 hour
     return user;
-  } catch (error) {
-    console.error("Error fetching user:", error);
+  } catch {
     throw new Error("User not found");
   }
 };
@@ -89,8 +88,7 @@ const getUserProfile = async (
     // Store the result in the cache
     myCache.set(cacheKey, userProfile, 3600); // Cache for 1 hour
     return userProfile;
-  } catch (error) {
-    console.error("Error fetching user profile:", error);
+  } catch {
     throw new Error("User profile not found");
   }
 };
@@ -120,8 +118,7 @@ const getUserWithProfile = async (
       myCache.set(profileCacheKey, profile, 3600); // Cache for 1 hour
     }
     return { user, profile };
-  } catch (error) {
-    console.error("Error fetching user data and profile:", error);
+  } catch {
     throw new Error("Failed to fetch user data and profile");
   }
 };

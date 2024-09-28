@@ -111,17 +111,8 @@ export interface LikeInfo {
 }
 
 export interface CommentWithRelatedData extends TrimmedCommentData {
-  // userId: string;
-  // postId: string;
-  // content: string;
   user: TrimmedUserData;
   post: TrimmedPostData;
-
-  // $id: string;
-  // userId: string;
-  // postId: string;
-  // content: string;
-  // $createdAt: string;
 }
 
 export interface CommentDataWithCursor {

@@ -15,10 +15,10 @@ import {
 export async function updateUserProfile(values: UpdateUserProfileValues) {
   const validatedValues = updateUserProfileSchema.parse(values);
   const jsonifiedValues = {
-    personalDetails: JSON.stringify(values.personalDetails),
-    education: JSON.stringify(values.education),
-    workExperience: JSON.stringify(values.workExperience),
-    githubRepositories: JSON.stringify(values.githubRepositories),
+    personalDetails: JSON.stringify(validatedValues.personalDetails),
+    education: JSON.stringify(validatedValues.education),
+    workExperience: JSON.stringify(validatedValues.workExperience),
+    githubRepositories: JSON.stringify(validatedValues.githubRepositories),
   };
   const { user } = await validateAndAuthenticateRequest();
   if (!user) throw new Error("Unauthorized");
@@ -41,8 +41,7 @@ export async function updateUserProfile(values: UpdateUserProfileValues) {
       jsonifiedValues, // The data to update
     );
     return updatedUserDocument;
-  } catch (error) {
-    console.error("Error updating user profile:", error);
+  } catch {
     throw new Error("Failed to update user profile");
   }
 }
