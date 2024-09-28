@@ -89,6 +89,11 @@ export interface PostWithRelatedDataAndCursor {
   nextCursor: string | null;
 }
 
+export interface UserDataAndCursor {
+  users: UserData[];
+  nextCursor: string | null;
+}
+
 // export interface PostDataWithCursor {
 //   posts: PostWithUser[];
 //   nextCursor: string | null;
