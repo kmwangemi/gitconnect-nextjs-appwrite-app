@@ -1,4 +1,4 @@
-import { PostDataWithCursor, PostWithUser } from "@/lib/types";
+import { PostWithRelatedData, PostWithRelatedDataAndCursor } from "@/lib/types";
 import {
   InfiniteData,
   QueryFilters,
@@ -13,14 +13,14 @@ export function useSubmitPostMutation() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: submitPost,
-    onSuccess: async (newPost: PostWithUser) => {
+    onSuccess: async (newPost: PostWithRelatedData) => {
       const queryFilter: QueryFilters = {
         queryKey: ["post-feed", "for-you"],
       };
       // Cancel any ongoing queries that match the query filter
       await queryClient.cancelQueries(queryFilter);
       queryClient.setQueriesData<
-        InfiniteData<PostDataWithCursor, string | null>
+        InfiniteData<PostWithRelatedDataAndCursor, string | null>
       >(queryFilter, (oldData) => {
         if (!oldData) return;
         const firstPage = oldData?.pages[0];

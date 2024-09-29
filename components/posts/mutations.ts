@@ -1,5 +1,5 @@
 import { useToast } from "@/hooks/use-toast";
-import { PostDataWithCursor } from "@/lib/types";
+import { PostWithRelatedDataAndCursor } from "@/lib/types";
 import {
   InfiniteData,
   QueryFilters,
@@ -20,7 +20,7 @@ export function useDeletePostMutation() {
       const queryFilter: QueryFilters = { queryKey: ["post-feed"] };
       await queryClient.cancelQueries(queryFilter);
       queryClient.setQueriesData<
-        InfiniteData<PostDataWithCursor, string | null>
+        InfiniteData<PostWithRelatedDataAndCursor, string | null>
       >(queryFilter, (oldData) => {
         if (!oldData) return;
         return {

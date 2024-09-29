@@ -1,21 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  commentCollectionID,
   databaseID,
   databases,
-  postCollectionID,
-  userCollectionID,
-  commentCollectionID,
   likeCollectionID,
+  postCollectionID,
   Query,
+  userCollectionID,
 } from "@/appwrite/config";
 import { validateAndAuthenticateRequest } from "@/lib/auth";
 import {
-  PostData,
-  UserData,
   CommentData,
   LikeData,
+  PostData,
   PostWithRelatedData,
+  UserData,
 } from "@/lib/types";
+import { Models } from "appwrite";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -42,36 +43,46 @@ export async function GET(req: NextRequest) {
       postCollectionID,
       postQuery,
     );
+    if (posts.documents.length === 0) {
+      // Return early if no posts exist
+      return Response.json({ posts: [], nextCursor: null });
+    }
     // Extract unique user IDs from posts
     const userIds = Array.from(
       new Set(posts.documents.map((post) => post.userId)),
     );
-    // Fetch user data for the corresponding userIds
-    const users = await databases.listDocuments<UserData>(
-      databaseID,
-      userCollectionID,
-      [
-        Query.equal("$id", userIds), // Fetch users whose IDs match userIds
-      ],
-    );
+    // Fetch user data only if there are userIds
+    let users: Models.DocumentList<UserData> = { total: 0, documents: [] };
+    if (userIds.length > 0) {
+      users = await databases.listDocuments<UserData>(
+        databaseID,
+        userCollectionID,
+        [Query.equal("$id", userIds)], // Fetch users whose IDs match userIds
+      );
+    }
     // Extract post IDs
     const postIds = posts.documents.map((post) => post.$id);
-    // Fetch likes for the corresponding posts
-    const likes = await databases.listDocuments<LikeData>(
-      databaseID,
-      likeCollectionID,
-      [
-        Query.equal("postId", postIds), // Fetch likes for the current postIds
-      ],
-    );
-    // Fetch comments for the corresponding posts
-    const comments = await databases.listDocuments<CommentData>(
-      databaseID,
-      commentCollectionID,
-      [
-        Query.equal("postId", postIds), // Fetch comments for the current postIds
-      ],
-    );
+    // Fetch likes
+    let likes: Models.DocumentList<LikeData> = { total: 0, documents: [] };
+    if (postIds.length > 0) {
+      likes = await databases.listDocuments<LikeData>(
+        databaseID,
+        likeCollectionID,
+        [Query.equal("postId", postIds)],
+      );
+    }
+    // Fetch comments
+    let comments: Models.DocumentList<CommentData> = {
+      total: 0,
+      documents: [],
+    };
+    if (postIds.length > 0) {
+      comments = await databases.listDocuments<CommentData>(
+        databaseID,
+        commentCollectionID,
+        [Query.equal("postId", postIds)],
+      );
+    }
     // Map users, likes, and comments to posts
     const postsWithDetails: PostWithRelatedData[] = posts.documents.map(
       (post) => {
@@ -96,8 +107,13 @@ export async function GET(req: NextRequest) {
             ...post,
             user: {
               $id: postUser.$id,
+              firstName: postUser.firstName,
+              lastName: postUser.lastName,
+              email: postUser.email,
               userName: postUser.userName,
               avatarUrl: postUser.avatarUrl || null,
+              $createdAt: postUser.$createdAt,
+              $updatedAt: postUser.$updatedAt,
             },
             likes: {
               count: likeCount,
