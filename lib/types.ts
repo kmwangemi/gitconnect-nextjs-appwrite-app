@@ -116,7 +116,7 @@ export interface CommentWithRelatedData extends TrimmedCommentData {
 }
 
 export interface CommentDataWithCursor {
-  comments: CommentWithRelatedData[];
+  comments: PostWithRelatedData[];
   previousCursor: string | null;
 }
 

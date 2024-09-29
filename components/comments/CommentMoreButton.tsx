@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import DeleteCommentDialog from "./DeleteCommentDialog";
+import React from "react";
 
 interface CommentMoreButtonProps {
   comment: TrimmedCommentData;

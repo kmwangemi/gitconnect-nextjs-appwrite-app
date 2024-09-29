@@ -74,7 +74,6 @@ export default function Post({ post }: PostProps) {
     </article>
   );
 }
-
 interface CommentButtonProps {
   post: PostWithRelatedData;
   onClick: () => void;

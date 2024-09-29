@@ -1,4 +1,4 @@
-import { CommentDataWithCursor, CommentWithRelatedData } from "@/lib/types";
+import { CommentDataWithCursor, PostWithRelatedData } from "@/lib/types";
 import {
   InfiniteData,
   QueryKey,
@@ -27,7 +27,7 @@ export function useSubmitCommentMutation(postId: string) {
               pages: [
                 {
                   ...firstPage,
-                  comments: [...firstPage.comments, newComment as unknown as CommentWithRelatedData],
+                  comments: [...firstPage.comments, newComment as unknown as PostWithRelatedData],
                 },
                 ...oldData.pages.slice(1),
               ],

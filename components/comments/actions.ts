@@ -9,14 +9,14 @@ import {
   userCollectionID,
 } from "@/appwrite/config";
 import { validateAndAuthenticateRequest } from "@/lib/auth";
-import { CommentWithRelatedData } from "@/lib/types";
+import { PostWithRelatedData } from "@/lib/types";
 import { createCommentSchema } from "@/lib/validation";
 
 export async function submitComment({
   post,
   content,
 }: {
-  post: CommentWithRelatedData;
+  post: PostWithRelatedData;
   content: string;
 }) {
   const { user } = await validateAndAuthenticateRequest();

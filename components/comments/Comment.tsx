@@ -1,5 +1,5 @@
 import { useSession } from "@/app/(dashboard)/SessionProvider";
-import { CommentWithRelatedData } from "@/lib/types";
+import { PostWithRelatedData } from "@/lib/types";
 import { formatRelativeDate } from "@/lib/utils";
 import Link from "next/link";
 import UserAvatar from "../UserAvatar";
@@ -7,7 +7,7 @@ import UserTooltip from "../UserTooltip";
 import CommentMoreButton from "./CommentMoreButton";
 
 interface CommentProps {
-  comment: CommentWithRelatedData;
+  comment: PostWithRelatedData;
 }
 
 export default function Comment({ comment }: CommentProps) {
@@ -39,7 +39,7 @@ export default function Comment({ comment }: CommentProps) {
       </div>
       {comment?.user?.$id === user?.userId && (
         <CommentMoreButton
-          comment={comment}
+          comment={{...comment, postId: comment.$id}}
           className="ms-auto opacity-0 transition-opacity group-hover/comment:opacity-100"
         />
       )}

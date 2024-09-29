@@ -1,4 +1,4 @@
-import { CommentWithRelatedData } from "@/lib/types";
+import { PostWithRelatedData } from "@/lib/types";
 import { Loader2, SendHorizonal } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -6,7 +6,7 @@ import { Input } from "../ui/input";
 import { useSubmitCommentMutation } from "./mutations";
 
 interface CommentInputProps {
-  post: CommentWithRelatedData;
+  post: PostWithRelatedData;
 }
 
 export default function CommentInput({ post }: CommentInputProps) {
