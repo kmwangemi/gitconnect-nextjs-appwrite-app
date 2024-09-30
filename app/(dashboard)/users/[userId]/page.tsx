@@ -9,7 +9,7 @@ import UserAvatar from "@/components/UserAvatar";
 import { validateAndAuthenticateRequest } from "@/lib/auth";
 import { TrimmedUserData, TrimmedUserProfileData } from "@/lib/types";
 import { formatDate } from "date-fns";
-import NodeCache from "node-cache"; // For caching
+// import NodeCache from "node-cache"; // For caching
 import EditProfileButton from "./EditProfileButton";
 import UserInfo from "./UserInfo";
 
@@ -17,15 +17,15 @@ interface PageProps {
   params: { userId: string };
 }
 
-const myCache = new NodeCache();
+// const myCache = new NodeCache();
 
 const getUser = async (userId: string): Promise<TrimmedUserData> => {
-  const cacheKey = `user-${userId}`;
+  // const cacheKey = `user-${userId}`;
   // Check if user data is in cache
-  const cachedUser = myCache.get<TrimmedUserData>(cacheKey);
-  if (cachedUser) {
-    return cachedUser;
-  }
+  // const cachedUser = myCache.get<TrimmedUserData>(cacheKey);
+  // if (cachedUser) {
+  //   return cachedUser;
+  // }
   try {
     const response = await databases.listDocuments(
       databaseID,
@@ -49,7 +49,7 @@ const getUser = async (userId: string): Promise<TrimmedUserData> => {
       $updatedAt: userDocument.$updatedAt,
     };
     // Store the result in the cache
-    myCache.set(cacheKey, user, 3600); // Cache for 1 hour
+    // myCache.set(cacheKey, user, 3600); // Cache for 1 hour
     return user;
   } catch {
     throw new Error("User not found");
@@ -59,12 +59,12 @@ const getUser = async (userId: string): Promise<TrimmedUserData> => {
 const getUserProfile = async (
   userId: string,
 ): Promise<TrimmedUserProfileData> => {
-  const cacheKey = `userProfile-${userId}`;
-  // Check if user data is in cache
-  const cachedUserProfile = myCache.get<TrimmedUserProfileData>(cacheKey);
-  if (cachedUserProfile) {
-    return cachedUserProfile;
-  }
+  // const cacheKey = `userProfile-${userId}`;
+  // // Check if user data is in cache
+  // const cachedUserProfile = myCache.get<TrimmedUserProfileData>(cacheKey);
+  // if (cachedUserProfile) {
+  //   return cachedUserProfile;
+  // }
   try {
     const response = await databases.listDocuments(
       databaseID,
@@ -86,7 +86,7 @@ const getUserProfile = async (
       githubRepositories: JSON.parse(userProfileDocument.githubRepositories),
     };
     // Store the result in the cache
-    myCache.set(cacheKey, userProfile, 3600); // Cache for 1 hour
+    // myCache.set(cacheKey, userProfile, 3600); // Cache for 1 hour
     return userProfile;
   } catch {
     throw new Error("User profile not found");
@@ -96,14 +96,14 @@ const getUserProfile = async (
 const getUserWithProfile = async (
   userId: string,
 ): Promise<{ user: TrimmedUserData; profile: TrimmedUserProfileData }> => {
-  const userCacheKey = `user-${userId}`;
-  const profileCacheKey = `userProfile-${userId}`;
-  // Check if both user and profile data are in cache
-  const cachedUser = myCache.get<TrimmedUserData>(userCacheKey);
-  const cachedProfile = myCache.get<TrimmedUserProfileData>(profileCacheKey);
-  if (cachedUser && cachedProfile) {
-    return { user: cachedUser, profile: cachedProfile };
-  }
+  // const userCacheKey = `user-${userId}`;
+  // const profileCacheKey = `userProfile-${userId}`;
+  // // Check if both user and profile data are in cache
+  // const cachedUser = myCache.get<TrimmedUserData>(userCacheKey);
+  // const cachedProfile = myCache.get<TrimmedUserProfileData>(profileCacheKey);
+  // if (cachedUser && cachedProfile) {
+  //   return { user: cachedUser, profile: cachedProfile };
+  // }
   try {
     // Fetch user and profile data concurrently
     const [user, profile] = await Promise.all([
@@ -111,12 +111,12 @@ const getUserWithProfile = async (
       getUserProfile(userId),
     ]);
     // Cache the results if they weren't cached already
-    if (!cachedUser) {
-      myCache.set(userCacheKey, user, 3600); // Cache for 1 hour
-    }
-    if (!cachedProfile) {
-      myCache.set(profileCacheKey, profile, 3600); // Cache for 1 hour
-    }
+    // if (!cachedUser) {
+    //   myCache.set(userCacheKey, user, 3600); // Cache for 1 hour
+    // }
+    // if (!cachedProfile) {
+    //   myCache.set(profileCacheKey, profile, 3600); // Cache for 1 hour
+    // }
     return { user, profile };
   } catch {
     throw new Error("Failed to fetch user data and profile");
