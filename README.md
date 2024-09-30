@@ -35,6 +35,8 @@ npm install
 yarn install
 ```
 ### 2. Set Up Environment Variables
+
+```bash
 NEXT_PUBLIC_APPWRITE_API_URL=https://cloud.appwrite.io/v1
 NEXT_PUBLIC_APPWRITE_PROJECT_ID=your-project-id
 NEXT_PUBLIC_APPWRITE_DATABASE_ID=your-database-id
@@ -45,6 +47,7 @@ NEXT_PUBLIC_APPWRITE_POST_COLLECTION_ID=your-post-collection-id
 NEXT_PUBLIC_APPWRITE_LIKE_COLLECTION_ID=your-like-collection-id
 NEXT_PUBLIC_APPWRITE_COMMENT_COLLECTION_ID=your-comment-collection-id
 NEXT_PUBLIC_APPWRITE_PROFILE_COLLECTION_ID=your-profile-collection-id
+```
 
 ### 3. Run the development server
 
